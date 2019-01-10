@@ -1,0 +1,54 @@
+# speechstatemanager CMake config file
+#
+# This file sets the following variables:
+# speechstatemanager_FOUND - Always TRUE.
+# speechstatemanager_INCLUDE_DIRS - Directories containing the speechstatemanager include files.
+# speechstatemanager_IDL_DIRS - Directories containing the speechstatemanager IDL files.
+# speechstatemanager_LIBRARIES - Libraries needed to use speechstatemanager.
+# speechstatemanager_DEFINITIONS - Compiler flags for speechstatemanager.
+# speechstatemanager_VERSION - The version of speechstatemanager found.
+# speechstatemanager_VERSION_MAJOR - The major version of speechstatemanager found.
+# speechstatemanager_VERSION_MINOR - The minor version of speechstatemanager found.
+# speechstatemanager_VERSION_REVISION - The revision version of speechstatemanager found.
+# speechstatemanager_VERSION_CANDIDATE - The candidate version of speechstatemanager found.
+
+message(STATUS "Found speechstatemanager-@PROJECT_VERSION@")
+set(speechstatemanager_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(speechstatemanager_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(speechstatemanager_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(speechstatemanager_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(speechstatemanager_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(speechstatemanager_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(speechstatemanager_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(speechstatemanager_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(speechstatemanager_VERSION @PROJECT_VERSION@)
+set(speechstatemanager_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(speechstatemanager_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(speechstatemanager_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(speechstatemanager_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

@@ -1,0 +1,47 @@
+﻿// -*-C++-*-
+/*!
+ * @file  SpeechConsumerSVC_impl.h
+ * @brief Service implementation header of SpeechConsumer.idl
+ *
+ */
+
+#include "SpeechConsumerSkel.h"
+
+#include <iostream>
+
+#ifndef SPEECHCONSUMERSVC_IMPL_H
+#define SPEECHCONSUMERSVC_IMPL_H
+ 
+/*!
+ * @class Consumer_SpeechConsumerSVC_impl
+ * Example class implementing IDL interface Consumer::SpeechConsumer
+ */
+class Consumer_SpeechConsumerSVC_impl
+ : public virtual POA_Consumer::SpeechConsumer,
+   public virtual PortableServer::RefCountServantBase
+{
+ private:
+   // Make sure all instances are built on the heap by making the
+   // destructor non-public
+   //virtual ~Consumer_SpeechConsumerSVC_impl();
+
+ public:
+  /*!
+   * @brief standard constructor
+   */
+   Consumer_SpeechConsumerSVC_impl();
+  /*!
+   * @brief destructor
+   */
+   virtual ~Consumer_SpeechConsumerSVC_impl();
+
+   // attributes and operations
+   void write(::CORBA::Long speechstate);
+   int Flag;
+};
+
+
+
+#endif // SPEECHCONSUMERSVC_IMPL_H
+
+

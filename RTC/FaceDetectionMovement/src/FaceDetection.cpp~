@@ -1,0 +1,180 @@
+﻿// -*- C++ -*-
+/*!
+ * @file  FaceDetection.cpp
+ * @brief ModuleDescription
+ * @date $Date$
+ *
+ * $Id$
+ */
+
+#include "FaceDetection.h"
+
+// Module specification
+// <rtc-template block="module_spec">
+static const char* facedetection_spec[] =
+  {
+    "implementation_id", "FaceDetection",
+    "type_name",         "FaceDetection",
+    "description",       "ModuleDescription",
+    "version",           "1.0.0",
+    "vendor",            "Kengo Ishida",
+    "category",          "ImageProcessing",
+    "activity_type",     "PERIODIC",
+    "kind",              "DataFlowComponent",
+    "max_instance",      "1",
+    "language",          "C++",
+    "lang_type",         "compile",
+    // Configuration variables
+    "conf.default.cascade", "haarcascade_frontalface_alt",
+
+    // Widget
+    "conf.__widget__.cascade", "text",
+    // Constraints
+
+    "conf.__type__.cascade", "string",
+
+    ""
+  };
+// </rtc-template>
+
+/*!
+ * @brief constructor
+ * @param manager Maneger Object
+ */
+FaceDetection::FaceDetection(RTC::Manager* manager)
+    // <rtc-template block="initializer">
+  : RTC::DataFlowComponentBase(manager),
+    m_inImageIn("inImage", m_inImage),
+    m_outImageOut("outImage", m_outImage),
+    m_moveamountOut("moveamount", m_moveamount)
+
+    // </rtc-template>
+{
+}
+
+/*!
+ * @brief destructor
+ */
+FaceDetection::~FaceDetection()
+{
+}
+
+
+
+RTC::ReturnCode_t FaceDetection::onInitialize()
+{
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  addInPort("inImage", m_inImageIn);
+  
+  // Set OutPort buffer
+  addOutPort("outImage", m_outImageOut);
+  addOutPort("moveamount", m_moveamountOut);
+  
+  // Set service provider to Ports
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  
+  // </rtc-template>
+
+  // <rtc-template block="bind_config">
+  // Bind variables and configuration variable
+  bindParameter("cascade", m_cascade, "haarcascade_frontalface_alt");
+  // </rtc-template>
+  
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t FaceDetection::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onStartup(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onShutdown(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+RTC::ReturnCode_t FaceDetection::onActivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t FaceDetection::onDeactivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t FaceDetection::onExecute(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t FaceDetection::onAborting(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onError(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onReset(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onStateUpdate(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t FaceDetection::onRateChanged(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+
+extern "C"
+{
+ 
+  void FaceDetectionInit(RTC::Manager* manager)
+  {
+    coil::Properties profile(facedetection_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<FaceDetection>,
+                             RTC::Delete<FaceDetection>);
+  }
+  
+};
+
+

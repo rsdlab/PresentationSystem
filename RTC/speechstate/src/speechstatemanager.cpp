@@ -1,0 +1,183 @@
+﻿// -*- C++ -*-
+/*!
+ * @file  speechstatemanager.cpp
+ * @brief speechstatemanager
+ * @date $Date$
+ *
+ * $Id$
+ */
+
+#include "speechstatemanager.h"
+
+#include <iostream>
+
+// Module specification
+// <rtc-template block="module_spec">
+static const char* speechstatemanager_spec[] =
+  {
+    "implementation_id", "speechstatemanager",
+    "type_name",         "speechstatemanager",
+    "description",       "speechstatemanager",
+    "version",           "1.0.0",
+    "vendor",            "hiroyasu_tsuji",
+    "category",          "Category",
+    "activity_type",     "PERIODIC",
+    "kind",              "DataFlowComponent",
+    "max_instance",      "1",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
+  };
+// </rtc-template>
+
+/*!
+ * @brief constructor
+ * @param manager Maneger Object
+ */
+speechstatemanager::speechstatemanager(RTC::Manager* manager)
+    // <rtc-template block="initializer">
+  : RTC::DataFlowComponentBase(manager),
+    m_speechoutOut("speechout", m_speechout),
+    m_speechinPort("speechin"),
+    m_speechstatePort("speechstate")
+
+    // </rtc-template>
+{
+}
+
+/*!
+ * @brief destructor
+ */
+speechstatemanager::~speechstatemanager()
+{
+}
+
+
+
+RTC::ReturnCode_t speechstatemanager::onInitialize()
+{
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  
+  // Set OutPort buffer
+  addOutPort("speechout", m_speechoutOut);
+  
+  // Set service provider to Ports
+  m_speechinPort.registerProvider("SpeechProvider", "Provider::SpeechProvider", m_SpeechProviderProvider);
+  
+  // Set service consumers to Ports
+  m_speechstatePort.registerConsumer("SpeechConsumer", "Consumer::SpeechConsumer", m_SpeechConsumerRequire);
+  
+  // Set CORBA Service Ports
+  addPort(m_speechinPort);
+  addPort(m_speechstatePort);
+  
+  // </rtc-template>
+
+  // <rtc-template block="bind_config">
+  // </rtc-template>
+  
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t speechstatemanager::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onStartup(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onShutdown(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+RTC::ReturnCode_t speechstatemanager::onActivated(RTC::UniqueId ec_id)
+{
+  sleep(1);
+  m_SpeechConsumerRequire->write(1);
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t speechstatemanager::onDeactivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t speechstatemanager::onExecute(RTC::UniqueId ec_id)
+{
+  if (m_SpeechProviderProvider.Flag == 1){
+    m_speechout.data = m_SpeechProviderProvider.m_speechdata.c_str();
+    std::cout << "speechoutdata : " << m_speechout.data << std::endl;
+    m_speechoutOut.write();
+    sleep(m_SpeechProviderProvider.sleeptime);
+    m_SpeechConsumerRequire->write(1);
+    m_SpeechProviderProvider.Flag = 0;
+  }
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t speechstatemanager::onAborting(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onError(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onReset(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onStateUpdate(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t speechstatemanager::onRateChanged(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+
+extern "C"
+{
+ 
+  void speechstatemanagerInit(RTC::Manager* manager)
+  {
+    coil::Properties profile(speechstatemanager_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<speechstatemanager>,
+                             RTC::Delete<speechstatemanager>);
+  }
+  
+};
+
+

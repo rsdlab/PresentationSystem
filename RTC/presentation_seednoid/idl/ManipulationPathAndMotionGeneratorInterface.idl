@@ -1,0 +1,79 @@
+#ifndef MANIPULATIONPATHANDMOTIONGENERATORINTERFACE_IDL
+#define MANIPULATIONPATHANDMOTIONGENERATORINTERFACE_IDL
+#include "BasicDataType.idl"
+
+module Manipulation{
+   
+  struct RETURN_ID {
+    long id;
+    string comment;
+  };
+  
+  struct ManipPos {
+    double rotation[9];
+    double position[3];
+  };
+
+  struct WaistPos{
+    double roll;
+    double pitch;
+    double yaw;
+  };
+
+  struct DualUpper{
+    ManipPos right;
+    ManipPos left;
+    WaistPos waist;
+  };
+
+  struct UpperArm{
+    ManipPos arm;
+    WaistPos waist;
+  };
+  
+  const long OK = 0;
+  const long NG = -1;
+  const long STATUS_ERR = -2;
+  const long VALUE_ERR = -3;
+  const long NOT_SV_ON_ERR = -4;
+  const long FULL_MOTION_QUEUE_ERR = -5;
+  const long NOT_IMPLEMENTED = -6;
+
+  typedef sequence<double> JointAngleSeq;
+  typedef sequence<JointAngleSeq> ViaPosSeq;
+  typedef sequence<ManipPos> ManipPosSeq;
+  typedef sequence<DualUpper> DualUpperSeq;
+
+  struct DualUpperJoint{
+    JointAngleSeq right;
+    JointAngleSeq left;
+    WaistPos waist;
+  };
+
+  typedef sequence<UpperArm> ViaUpperArmSeq;
+  typedef sequence<DualUpperJoint> ViaDualUpperJointSeq;
+
+  interface PathAndMotionGeneratorInterface{
+    //Right
+    RETURN_ID JointSpaceGenerateRightArmMotion(in JointAngleSeq goalJointPos);
+    RETURN_ID GenerateRightArmMotion(in UpperArm goalUpperPos);
+    RETURN_ID JointSpaceGenerateRightArmViaMotion(in ViaPosSeq viaJointPos,in JointAngleSeq goalJointPos);
+    RETURN_ID GenerateRightArmViaMotion(in ViaUpperArmSeq viaUpperPos,in UpperArm goalUpperPos);
+    RETURN_ID GenerateRightArmLinearMotion(in UpperArm goalUpperPos);
+    //Left
+    RETURN_ID JointSpaceGenerateLeftArmMotion(in JointAngleSeq goalJointPos);
+    RETURN_ID GenerateLeftArmMotion(in UpperArm goalUpperPos);
+    RETURN_ID JointSpaceGenerateLeftArmViaMotion(in ViaPosSeq viaJointPos,in JointAngleSeq goalJointPos);
+    RETURN_ID GenerateLeftArmViaMotion(in ViaUpperArmSeq viaUpperPos,in UpperArm goalUpperPos);
+    RETURN_ID GenerateLeftArmLinearMotion(in UpperArm goalUpperPos);
+    //Dual
+    RETURN_ID JointSpaceGenerateDualArmMotion(in DualUpperJoint goalJointPos);
+    RETURN_ID GenerateDualArmMotion(in DualUpper goalUpperPos); 
+    RETURN_ID JointSpaceGenerateDualArmViaMotion(in ViaDualUpperJointSeq viaJointPos, in DualUpperJoint goalJointPos);
+    RETURN_ID GenerateDualArmViaMotion(in DualUpperSeq viaUpperPos, in DualUpper goalUpperPos);
+    RETURN_ID GenerateDualArmLinearMotion(in DualUpper goalUpperPos);
+    
+  };
+
+};
+#endif //MANIPULATIONPATHANDMOTIONGENERATORINTERFACE_IDL

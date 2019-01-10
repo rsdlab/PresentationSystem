@@ -1,0 +1,97 @@
+﻿// -*-C++-*-
+/*!
+ * @file  ActionManageSVC_impl.cpp
+ * @brief Service implementation code of ActionManage.idl
+ *
+ */
+
+#include "ActionManageSVC_impl.h"
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <stdlib.h>
+
+using namespace std;
+
+/*
+ * Example implementational code for IDL interface Action::ActionManage
+ */
+Action_ActionManageSVC_impl::Action_ActionManageSVC_impl()
+{
+  // Please add extra constructor code here.
+}
+
+
+Action_ActionManageSVC_impl::~Action_ActionManageSVC_impl()
+{
+  // Please add extra destructor code here.
+}
+
+
+/*
+ * Methods corresponding to IDL attributes and operations
+ */
+void Action_ActionManageSVC_impl::read(const char* actionid)
+{
+  // Please insert your code here and remove the following warning pragma
+#ifndef WIN32
+  #warning "Code missing in function <void Action_ActionManageSVC_impl::read(const char* actionid)>"
+  vector<string> data;
+  std::ifstream ifs("../../data.csv");
+  std::string str;
+  
+  while(getline(ifs, str)){
+    istringstream stream(str);
+    string field;
+    while(getline(stream, field, ',')){
+      data.push_back(field);
+    }
+  }
+  for(vector<string>::size_type i = 16; i < data.size(); i+=16){
+    if(data[i] == actionid){
+      selectarm = atof(data [i+1].c_str());
+      arm0 = atof(data [i+2].c_str());
+      arm1 = atof(data [i+3].c_str());
+      arm2 = atof(data [i+4].c_str());
+      arm3 = atof(data [i+5].c_str());
+      arm4 = atof(data [i+6].c_str());
+      arm5 = atof(data [i+7].c_str());
+      arm6 = atof(data [i+8].c_str());
+      handpara = atof(data [i+9].c_str());
+      neckyoo = atof(data [i+10].c_str());
+      neckpich = atof(data [i+11].c_str());
+      neckrole = atof(data [i+12].c_str());
+      waistyoo = atof(data [i+13].c_str());
+      waistpich = atof(data [i+14].c_str());
+      waistrole = atof(data [i+15].c_str());
+      Flag = 1;
+      std::cout << "selectarm : " << selectarm << std::endl;
+      std::cout << "arm0 : " << arm0 << std::endl;
+      std::cout << "arm1 : " << arm1 << std::endl;
+      std::cout << "arm2 : " << arm2 << std::endl;
+      std::cout << "arm3 : " << arm3 << std::endl;
+      std::cout << "arm4 : " << arm4 << std::endl;
+      std::cout << "arm5 : " << arm5 << std::endl;
+      std::cout << "arm6 : " << arm6 << std::endl;
+      std::cout << "handpara : " << handpara << std::endl;
+      std::cout << "neckyoo : " << neckyoo << std::endl;
+      std::cout << "neckpich : " << neckpich << std::endl;
+      std::cout << "neckrole : " << neckrole << std::endl;
+      std::cout << "waistyoo : " << waistyoo << std::endl;
+      std::cout << "waistpich : " << waistpich << std::endl;
+      std::cout << "waistrole : " << waistrole << std::endl;
+    }
+  }
+
+#endif
+}
+
+
+
+// End of example implementational code
+
+
+
